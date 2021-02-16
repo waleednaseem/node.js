@@ -1,0 +1,11 @@
+0:00​ Introduction
+00:01:20​ What is Node.JS
+00:13:42​ Node.JS Installation on windows 10
+00:17:32​ Node JS Architecture
+00:21:44​ Node JS NPM
+00:36:25​ Node JS Express Framework
+01:11:07​ Building a REST API USing Node JS
+01:35:26​ Node JS Authentication with JWT
+01:58:23​ Node JS MySQL Tutorial
+02:23:37​ Node JS MongoDB Tutorial
+03:24:17​ Node JS Interview questions and answers
