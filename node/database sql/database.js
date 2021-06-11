@@ -32,6 +32,7 @@ App.get('/createtable',(req,res)=>{
         if(err){
             throw err
         }
+        res.send('table created')
     })
 })
 
