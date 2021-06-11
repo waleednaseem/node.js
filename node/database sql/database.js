@@ -26,4 +26,13 @@ App.get('/createdb', (req, res) => {
     })
 })
 
+App.get('/createtable',(req,res)=>{
+    let table = 'CREATE TABLE waleeddb(id int AUTO_INCREMENT,username VARCHAR(225), passowrd VARCHAR(225))'
+    db.query(table, err =>{
+        if(err){
+            throw err
+        }
+    })
+})
+
 App.listen(port, console.log(`connected server of port ${port}`))
