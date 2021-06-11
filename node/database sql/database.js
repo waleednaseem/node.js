@@ -27,7 +27,7 @@ App.get('/createdb', (req, res) => {
 })
 
 App.get('/createtable',(req,res)=>{
-    let table = 'CREATE TABLE waleeddb(id int AUTO_INCREMENT,username VARCHAR(225), passowrd VARCHAR(225))'
+    let table = 'CREATE TABLE credentials(id int AUTO_INCREMENT,username VARCHAR(225), passowrd VARCHAR(225),PRIMARY KEY (id))'
     db.query(table, err =>{
         if(err){
             throw err
