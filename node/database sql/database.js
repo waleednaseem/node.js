@@ -6,7 +6,7 @@ const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database:'waleeddb'
+    database: 'waleeddb'
 })
 
 db.connect(err => {
@@ -26,13 +26,24 @@ App.get('/createdb', (req, res) => {
     })
 })
 
-App.get('/createtable',(req,res)=>{
+App.get('/createtable', (req, res) => {
     let table = 'CREATE TABLE credentials(id int AUTO_INCREMENT,username VARCHAR(225), passowrd VARCHAR(225),PRIMARY KEY (id))'
-    db.query(table, err =>{
-        if(err){
+    db.query(table, err => {
+        if (err) {
             throw err
         }
         res.send('table created')
+    })
+})
+App.get('/insertquery', (req, res) => {
+    const sql = 'INSERT INTO credentials SET ?'
+    const post = { username: 'waleed', passowrd: 'waleed' }
+
+    const Query = db.query(sql, post, (err) => {
+        if(err){
+            throw err
+        }
+            res.send('inserted data')
     })
 })
 
