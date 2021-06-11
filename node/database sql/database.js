@@ -39,12 +39,40 @@ App.get('/insertquery', (req, res) => {
     const sql = 'INSERT INTO credentials SET ?'
     const post = { username: 'waleed', passowrd: 'waleed' }
 
-    const Query = db.query(sql, post, (err) => {
+    db.query(sql, post, (err) => {
+        if (err) {
+            throw err
+        }
+        res.send('inserted data')
+    })
+})
+App.get('/getdata', (req, res) => {
+    let data = ' SELECT * FROM credentials'
+    db.query(data, (err, result) => {
+        if (err) {
+            throw err
+        }
+        // console.log(result)
+        res.send(result)
+    })
+})
+App.get('/updateuser/:id', (req, res) => {
+    let userupdate = 'faizan'
+    let update = `UPDATE credentials SET username = '${userupdate}' WHERE id = ${req.params.id}`
+    db.query(update, (err) => {
+        if (err) {
+            throw err
+        }
+        res.send('updated user')
+    })
+})
+App.get('/delete/:id', (req, res) => {
+    const deleted = `DELETE from credentials WHERE id=${req.params.id}`
+    db.query(deleted,err=>{
         if(err){
             throw err
         }
-            res.send('inserted data')
+        res.send('deleted')
     })
 })
-
 App.listen(port, console.log(`connected server of port ${port}`))
