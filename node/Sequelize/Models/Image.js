@@ -5,10 +5,6 @@ module.exports=(sequelize,DataTypes)=>{
         },
         image_url:{
             type:DataTypes.STRING
-        },
-        ProfileId:{
-            allowNull:false,
-            type:DataTypes.INTEGER
         }
     })
     return images

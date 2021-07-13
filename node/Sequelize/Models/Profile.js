@@ -3,10 +3,6 @@ module.exports=(sequelize,DataTypes)=>{
         username: DataTypes.STRING,
         address: DataTypes.STRING,
         phone: DataTypes.INTEGER,
-        userId: {
-            allowNull: false,
-            type: DataTypes.INTEGER
-        }
     });
     return Profile
 }

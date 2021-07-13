@@ -3,9 +3,9 @@ const App = express()
 const port = 8080
 const jwt = require('jsonwebtoken')
 
+App.use(express.json())
 const ctrl =require('./Controller/controller')
 const db = require('./Models/index')
-
 function VerifyToken(req, res, next){
     const barrerheader = req.headers['authorization']
     if(typeof barrerheader !== 'undefined'){

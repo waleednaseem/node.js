@@ -2,7 +2,7 @@ const db = require('../Models')
 
 const Users = db.Users
 const Profile = db.Profile
-const post = db.Post
+// const post = db.Post
 const Videos = db.Videos
 const Images = db.Images
 const comments = db.Comments
@@ -14,50 +14,17 @@ const adduser = (req, res) => {
     }
     res.status(200).json(response)
 }
-const insert = (req, res) => {
-    // Users.create({
-    //     name: 'waleed',
-    //     password: 'password',
-    //     // userId:1
+const insert = async (req, res) => {
+    try {
+        const body = req.body;
+        const newUser = await Users.create(body, { isNewRecord: true });
+        const profile = await Profile.create({ ...body, userId: newUser.id });
+        const image = await Images.create({...body, ProfileId:profile.id})
+        return res.send({ newUser, profile, image });
 
-    // }).catch(err => {
-    //     if (err) {
-    //         console.log(err)
-    //     }
-    // })
-    // Profile.create({
-    //     username: 'ali',
-    //     address: '5a4 madiha stop',
-    //     phone: 21534215,
-    //     userId: 1,
-        // ProfileId:1
-    // })
-    // post.create({
-    //     userId: 3,
-    //     ProfileId: 3
-    // }).catch(err => {
-    //     if (err) {
-    //         console.log(err)
-    //     }
-    // })
-    // Images.create({
-    //     image_name:'waleed.jpg',
-    //     image_url:'/waleed.jpg',
-    //     ProfileId:1
-    // }).catch(err => console.log(err))
-
-    // Videos.create({
-    //     video_name: 'aliVideo',
-    //     video_origin: 'from Ali',
-    //     ProfileId: 1
-    // }).catch(err => console.log(err))
-
-    // comments.create({
-    //     comment:'video is for first id',
-    //     commentable_id:1,
-    //     comments_Type:'video'
-    // })
-    res.send('inserted')
+    } catch (ex) {
+        return res.status(500).send(ex)
+    }
 }
 
 
@@ -75,10 +42,14 @@ const hasonetoone = async (req, res) => {
         include: [{
             model: Profile,
             attributes: ['username', 'address', 'phone'],
-            as: 'postDetails'
-        }],
-        attributes: ['id', 'name'],
-        where: { id: 1 }
+            as: 'Profile',
+            include: [{
+                model: Images,
+                as: 'images'
+            }]
+        }]
+        // attributes: ['id', 'name'],
+        // where: { id: 1 }
     })
     // const resp={
     //     data:user
@@ -89,8 +60,8 @@ const belongstomany = async (req, res) => {
     const user = await Users.findAll({
         include: [{
             model: Profile,
-            attributes: ['username', 'address', 'phone'],
-            as: 'User_Profile'
+            // attributes: ['username', 'address', 'phone'],
+            as: 'Profile'
         }],
         attributes: ['name'],
         where: { id: 1 }
@@ -132,22 +103,24 @@ const ApiPost = (req, res, next) => {
             const data = await Profile.findOne({
                 include: [{
                     model: Images, as: 'Images',
-                    include:{
-                        model:comments,
+                    include: {
+                        model: comments,
                         foreignKey: 'commentable_id',
                         constraits: false,
-                        as:'Comments'
+                        as: 'Comments'
                     }
                 }, {
                     model: Videos, as: 'Videos',
-                    include:{
-                        model:comments,
+                    include: {
+                        model: comments,
                         foreignKey: 'commentable_id',
                         constraits: false,
-                        as:'Comments'
+                        as: 'Comments'
                     }
-                    }
+                }
                 ]
+            }, {
+                as: 'Profile'
             })
             res.json({
                 msg: 'Login sucessfully',

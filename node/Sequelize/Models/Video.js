@@ -6,10 +6,10 @@ module.exports=(sequelize,DataTypes)=>{
         video_origin:{
             type: DataTypes.STRING
         },
-        ProfileId:{
-            allowNull:false,
-            type:DataTypes.INTEGER
-        }
+        // ProfileId:{
+        //     allowNull:false,
+        //     type:DataTypes.INTEGER
+        // }
     })
     return Video
 }

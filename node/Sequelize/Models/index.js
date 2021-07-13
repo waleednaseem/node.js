@@ -20,14 +20,11 @@ db.sequelize.sync({ force: false })
 
 db.Users = require('./User')(sequelize, DataTypes)
 db.Profile = require('./Profile')(sequelize, DataTypes)
-db.Post = require('./Post')(sequelize, DataTypes)
+// db.Post = require('./Post')(sequelize, DataTypes)
 
 
-db.Users.hasOne(db.Profile, { foreignKey: 'userId', as: 'postDetails' })
-db.Profile.belongsTo(db.Users, { foreignKey: 'userId' })
-
-db.Profile.belongsToMany(db.Users, { through: 'post', as: 'user_post' })
-db.Users.belongsToMany(db.Profile, { through: 'post', as: 'User_Profile' })
+db.Users.hasOne(db.Profile, { foreignKey: 'userId',allowNull:false, as: 'Profile' })
+db.Profile.belongsTo(db.Users, { foreignKey: 'userId', allowNull:false })
 
 db.Profile.addScope('checkid', {
     where: {
@@ -40,15 +37,14 @@ db.Comments = require('./Comments')(sequelize, DataTypes)
 
 db.Profile.hasMany(db.Images,{
      foreignKey: 'ProfileId',
-      constraits: false,
-       as: 'Images' 
+       as: 'images' 
     })
 db.Profile.hasMany(db.Videos,{
     foreignKey:'ProfileId',
     constraits:false,
     as:'Videos'
 })
-db.Images.belongsTo(db.Profile,{foreignKey: 'commentable_id'})
+db.Images.belongsTo(db.Profile,{foreignKey: 'ProfileId',as:'Profile'})
 
 db.Images.hasMany(db.Comments, {
     foreignKey: 'commentable_id',
