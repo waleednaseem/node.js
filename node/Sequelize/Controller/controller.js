@@ -2,10 +2,11 @@ const db = require('../Models')
 
 const Users = db.Users
 const Profile = db.Profile
-// const post = db.Post
 const Videos = db.Videos
 const Images = db.Images
 const comments = db.Comments
+const Conversation = db.Conversation
+const Message = db.Messages
 
 const adduser = (req, res) => {
 
@@ -14,22 +15,49 @@ const adduser = (req, res) => {
     }
     res.status(200).json(response)
 }
-const insert = async (req, res) => {
-    try {
-        const body = req.body;
-        const newUser = await Users.create(body, { isNewRecord: true });
-        const profile = await Profile.create({ ...body, userId: newUser.id });
-        const image = await Images.create({...body, ProfileId:profile.id})
-        return res.send({ newUser, profile, image });
 
-    } catch (ex) {
-        return res.status(500).send(ex)
-    }
+const insert = async (req, res) => {
+
+    const body = req.body;
+    const newUser = await Users.create(body, { isNewRecord: true })
+    var profile = await Profile.create({ ...body, userId: newUser.id }) //i need this id
+
+    const image = await Images.create({ ...body, ProfileId: profile.id })
+    const commentImage = await comments.create({ ...body, commentable_id: image.id })
+
+    const video = await Videos.create({ ...body, ProfileId: profile.id })
+    const commentVideo = await comments.create({ ...body, commentable_id: video.id })
+
+    return res.send({ newUser, profile, image, commentImage, commentVideo});
+
+}
+
+
+const startConve = async (req, res) => {
+   
+    const body = req.body;
+    const profile = await Profile.scope('checkid').findOne({})
+    const conversation = await Conversation.create({ ProfileId: profile.id }) //to here
+    // const conversation = await Conversation.create({...body,ProfileId:1}) //to here
+    // const messages = await Message.create({...body})
+    return res.send({ profile, conversation })
 }
 
 
 const showall = async (req, res) => {
     const data = await Users.findAll({
+        include:[{
+            model:Profile,
+            as:'Profile',
+            include:[{
+                model: Images,
+                as:'images',
+                include:{
+                    model:comments,
+                    as:'Comments'
+                }
+            }]
+        }],
         attributes: ['id', 'name']
     })
     const response = {
@@ -45,16 +73,28 @@ const hasonetoone = async (req, res) => {
             as: 'Profile',
             include: [{
                 model: Images,
-                as: 'images'
-            }]
+                as: 'images',
+                include: {
+                    model: comments,
+                    as: 'Comments'
+                }
+            }, {
+                model: Videos,
+                as: 'Videos',
+                include: [{
+                    model: comments,
+                    as: 'Comments'
+                }]
+            }],
+
         }]
-        // attributes: ['id', 'name'],
-        // where: { id: 1 }
+
     })
-    // const resp={
-    //     data:user
-    // }
     res.status(200).json(user)
+}
+const comment = async (req, res) => {
+    const Comments = await comments.findAll({})
+    res.send({ Comments })
 }
 const belongstomany = async (req, res) => {
     const user = await Users.findAll({
@@ -78,6 +118,8 @@ const fromPost = async (req, res) => {
     res.status(200).json(Post)
 }
 const jwt = require('jsonwebtoken')
+const Comments = require('../Models/Comments')
+const Video = require('../Models/Video')
 
 const Login = async (req, res) => {
     const credentials = { name: 'ali', password: 'password' }
@@ -144,5 +186,7 @@ module.exports = {
     fromPost,
     Login,
     ApiPost,
-    scopes
+    scopes,
+    comment,
+    startConve
 }

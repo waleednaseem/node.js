@@ -3,9 +3,9 @@ module.exports=(sequelize,DataTypes)=>{
         comment:{
             type: DataTypes.STRING
         },
-        // commentable_id:{
-        //     type:DataTypes.INTEGER
-        // },
+        commentable_id:{
+            type:DataTypes.INTEGER
+        },
         comments_Type:{
             type:DataTypes.STRING
         }

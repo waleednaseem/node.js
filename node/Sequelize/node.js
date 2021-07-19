@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 
 App.use(express.json())
 const ctrl =require('./Controller/controller')
-const db = require('./Models/index')
+
 function VerifyToken(req, res, next){
     const barrerheader = req.headers['authorization']
     if(typeof barrerheader !== 'undefined'){
@@ -28,6 +28,8 @@ App.get('/post',ctrl.fromPost)
 App.get('/api/login',ctrl.Login)
 App.get('/ApiPost',VerifyToken,ctrl.ApiPost)
 App.get('/scope',ctrl.scopes)
+App.get('/comment',ctrl.comment)
+App.get('/start',ctrl.startConve)
 
 // App.get('/api/logins', async(req, res) => {
     // const user = {
