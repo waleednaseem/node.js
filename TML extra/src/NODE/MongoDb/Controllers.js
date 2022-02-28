@@ -30,14 +30,29 @@ const Login = async (req, res) => {
             res.status(200).json({ msg: 'Logged in', token, FindUser })
         })
         // await FindUser.Data.push(UserData.user.objectid)
-        const datas =await UserData.find({User:FindUser._id})
+        const datas = await UserData.find({ User: FindUser._id })
         // console.log(datas[0]._id)
-        await FindUser.Data.push({data:datas})   
+        await FindUser.Data.push({ data: datas })
     }
     else {
         res.json({ msg: 'Wrong credentials from mongo ' })
     }
 
+}
+const updateUser = async (req, res) => {
+    const credentials = { Username: req.body.Username }
+    const pass = { password: req.body.password }
+    // const user = { Username: req.body.Username, password: req.body.password }
+    const findUser = await User.findOne({ credentials })
+    // console.log(findUser.id.toString())
+    if (findUser) {
+        await User.findOneAndUpdate({ _id: findUser.id }, pass).then(res => console.log(res))
+            .catch(err => console.log(err))
+
+        res.send('User Updated')
+    } else {
+        res.send('User not Found')
+    }
 }
 const data = async (req, res) => {
 
@@ -104,14 +119,13 @@ const insertData = async (req, res) => {
     if (insertDatas) {
         res.json(`Data is already inserted from ${insertDatas.Username} ${insertDatas.order_from_country} at ${insertDatas.createdAt}`)
     } else {
-        const datas =User.Data
-        await UserData.create(data).then(res => console.log(res._id)
-        //     {
-        //     $push:{datas:{
-        //         _id:res._id
-        //     }}
-        // }
-         )
+        await UserData.create(data).then(res => User.findOneAndUpdate({ _id: res._id },{
+            $push: {
+                Data: {
+                    _id: res._id
+                }
+            }
+        }))
         // await UserData({$push:{Data: data}})
 
         res.status(200).json({ msg: 'Data inserted', data })
@@ -119,9 +133,9 @@ const insertData = async (req, res) => {
     // res.send(insertDatas)
 }
 const history = async (req, res) => {
-    const admin = await User.findOne({Username: req.body.Username})
+    const admin = await User.findOne({ Username: req.body.Username })
     const adminRole = await UserData.find()
-    const userRole = await UserData.find({Username: req.body.Username})
+    const userRole = await UserData.find({ Username: req.body.Username })
 
     admin.Username === 'admin' ? res.json(adminRole) : res.json(userRole)
 }
@@ -147,6 +161,6 @@ module.exports = {
     insertData,
     history,
     searchConsignee,
-    data
-    // updateUser
+    data,
+    updateUser
 }

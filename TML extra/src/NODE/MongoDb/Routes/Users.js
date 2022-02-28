@@ -10,6 +10,6 @@ router.post('/insertdata',userCtrl.insertData)
 router.post('/SearchByConsignee',userCtrl.searchConsignee)
 router.post('/history',userCtrl.history)
 router.post('/data',userCtrl.data)
-// router.post('/update', userCtrl.updateUser)
+router.post('/update', userCtrl.updateUser)
 
 module.exports= router;

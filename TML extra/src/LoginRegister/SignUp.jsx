@@ -38,7 +38,7 @@ export default function SignUp() {
     e.preventDefault();
     axios.post("http://localhost:4000/users/update", {
       Username: name,
-      Password: password,
+      password: password,
     })
     .then(res=> res.data === 'User not Found'? toast.error(res.data): toast.success(res.data))
     .catch(err => console.log(err))

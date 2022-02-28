@@ -44,7 +44,7 @@ export default function History() {
   const searchConsignee = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:4000/SearchByConsignee", {
+      .post("http://localhost:4000/users/SearchByConsignee", {
         consName: consignee,
       })
       .then((res) => {
