@@ -29,8 +29,8 @@ export default function SignUp() {
       .then((res) =>
         res.data === "User is already registered"
           ? toast.error(res.data)
-          : toast.success(res.data)
-          // console.log(res.data)
+          : toast.success(res.data.msg)
+          // console.log(res.data.msg)
       )
       .catch((err) => console.log(err));
   };
@@ -40,7 +40,9 @@ export default function SignUp() {
       Username: name,
       password: password,
     })
-    .then(res=> res.data === 'User not Found'? toast.error(res.data): toast.success(res.data))
+    .then(res=>  
+      res.data === 'User not Found'? toast.error(res.data): toast.success(res.data)
+      )
     .catch(err => console.log(err))
   };
 

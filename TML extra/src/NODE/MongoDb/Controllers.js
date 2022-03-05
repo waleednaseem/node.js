@@ -35,7 +35,7 @@ const Login = async (req, res) => {
         await FindUser.Data.push({ data: datas })
     }
     else {
-        res.json({ msg: 'Wrong credentials from mongo ' })
+        res.json({ msg: 'Wrong credentials' })
     }
 
 }
@@ -43,12 +43,8 @@ const updateUser = async (req, res) => {
     const credentials = { Username: req.body.Username }
     const pass = { password: req.body.password }
     // const user = { Username: req.body.Username, password: req.body.password }
-    const findUser = await User.findOne({ credentials })
-    // console.log(findUser.id.toString())
+    const findUser = await User.findOneAndUpdate(credentials,pass)
     if (findUser) {
-        await User.findOneAndUpdate({ _id: findUser.id }, pass).then(res => console.log(res))
-            .catch(err => console.log(err))
-
         res.send('User Updated')
     } else {
         res.send('User not Found')
@@ -93,7 +89,6 @@ const insertData = async (req, res) => {
         User: req.body.User
     }
     const Cdata = {
-        // order_from_country: req.body.order_from_country,
         shipAddr: req.body.shipAddr,
         shipTell: req.body.shipTell,
         shipEmail: req.body.shipEmail,
@@ -119,18 +114,16 @@ const insertData = async (req, res) => {
     if (insertDatas) {
         res.json(`Data is already inserted from ${insertDatas.Username} ${insertDatas.order_from_country} at ${insertDatas.createdAt}`)
     } else {
-        await UserData.create(data).then(res => User.findOneAndUpdate({ _id: res._id },{
+        await UserData.create(data).then(res => User.findOneAndUpdate({ _id: res._id }, {
             $push: {
                 Data: {
                     _id: res._id
                 }
             }
         }))
-        // await UserData({$push:{Data: data}})
 
         res.status(200).json({ msg: 'Data inserted', data })
     }
-    // res.send(insertDatas)
 }
 const history = async (req, res) => {
     const admin = await User.findOne({ Username: req.body.Username })

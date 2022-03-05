@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const moment=require('moment')
 const UserData= new mongoose.Schema({
     order_from_country:{
         type: String,
@@ -110,6 +110,18 @@ const UserData= new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         required:true,
         ref:"users"
+    },
+    createdAt: {
+        type: Date,                  
+        get() {
+            return moment().format('LL')
+        }
+    },
+    updatedAt: {
+        type: Date,
+        get() {
+            return moment().format('LL')
+        }
     }
     
     

@@ -28,7 +28,7 @@ import jwt from "jwt-decode";
 export default function History() {
   const [page, setPage] = useState(0);
   const [data, setData] = useState([]);
-  const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [dense, setDense] = useState(false);
   const [open, setOpen] = useState(false);
   const [consignee, setconsignee] = useState(null);
@@ -37,7 +37,7 @@ export default function History() {
   // console.log(data)
   const handleOpen = (x) => {
     setOpen(true);
-    console.log(x);
+    // console.log(x);
   };
   const handleClose = () => setOpen(false);
   
@@ -201,6 +201,7 @@ export default function History() {
                 searching.map((x) => {
                   return (
                     <div
+                    key={x.id}
                       style={{
                         display: "flex",
                         backgroundColor: "#f0eeeb",
@@ -277,58 +278,15 @@ export default function History() {
                 <TableCell
                   style={{ color: "white", backgroundColor: "orange" }}
                 >
-                  Shipper Addr
-                </TableCell>
-                <TableCell
-                  style={{ color: "white", backgroundColor: "orange" }}
-                >
-                  Shipper Tel
-                </TableCell>
-                <TableCell
-                  style={{ color: "white", backgroundColor: "orange" }}
-                >
-                  Shipper Email
-                </TableCell>
-                <TableCell
-                  style={{ color: "white", backgroundColor: "orange" }}
-                >
-                  Shipper PIC
-                </TableCell>
-                <TableCell
-                  style={{ color: "white", backgroundColor: "orange" }}
-                >
                   Consignee Name
                 </TableCell>
-                <TableCell
-                  style={{ color: "white", backgroundColor: "orange" }}
-                >
-                  Consignee Addr
-                </TableCell>
-                <TableCell
-                  style={{ color: "white", backgroundColor: "orange" }}
-                >
-                  Consignee tell
-                </TableCell>
-                <TableCell
-                  style={{ color: "white", backgroundColor: "orange" }}
-                >
-                  Consignee Email
-                </TableCell>
-                <TableCell
-                  style={{ color: "white", backgroundColor: "orange" }}
-                >
-                  Consignee PIC
-                </TableCell>
+                
                 <TableCell
                   style={{ color: "white", backgroundColor: "orange" }}
                 >
                   Competition
                 </TableCell>
-                <TableCell
-                  style={{ color: "white", backgroundColor: "orange" }}
-                >
-                  Volume
-                </TableCell>
+                
                 <TableCell
                   style={{ color: "white", backgroundColor: "orange" }}
                 >
@@ -349,16 +307,12 @@ export default function History() {
                 >
                   Comodities
                 </TableCell>
-                <TableCell
-                  style={{ color: "white", backgroundColor: "orange" }}
-                >
-                  Freight Term
-                </TableCell>
-                <TableCell
+                
+                {/* <TableCell
                   style={{ color: "white", backgroundColor: "orange" }}
                 >
                   Remark
-                </TableCell>
+                </TableCell> */}
                 <TableCell
                   style={{ color: "white", backgroundColor: "orange" }}
                 >
@@ -386,23 +340,13 @@ export default function History() {
                     <TableRow hover key={x.id} style={{ color: "#313332"}}>
                       <TableCell>{x.order_from_country}</TableCell>
                       <TableCell>{x.shipName}</TableCell>
-                      <TableCell>{x.shipAddr}</TableCell>
-                      <TableCell>{x.shipTell}</TableCell>
-                      <TableCell>{x.shipEmail}</TableCell>
-                      <TableCell>{x.shipPic}</TableCell>
                       <TableCell>{x.consName}</TableCell>
-                      <TableCell>{x.consAddr}</TableCell>
-                      <TableCell>{x.consTell}</TableCell>
-                      <TableCell>{x.consEmail}</TableCell>
-                      <TableCell>{x.consPic}</TableCell>
                       <TableCell>{x.competition}</TableCell>
-                      <TableCell>{x.volume}</TableCell>
                       <TableCell>{x.port_of_loading}</TableCell>
                       <TableCell>{x.port_of_discharge}</TableCell>
                       <TableCell>{x.final_destination}</TableCell>
                       <TableCell>{x.comodities}</TableCell>
-                      <TableCell>{x.freight_term}</TableCell>
-                      <TableCell style={{
+                      {/* <TableCell style={{
                         display: 'block',
                         width: '267px',
                         height: '74px',
@@ -414,7 +358,7 @@ export default function History() {
                         // text-overflow: ellipsis;
                       }}>
                         {x.remark}
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell>{x.createdAt}</TableCell>
                       <TableCell>
                         <Button onClick={() => pdfviewer(x)}>
@@ -437,7 +381,7 @@ export default function History() {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[6, 10, 14, 20, 50, 80, 100]}
+          rowsPerPageOptions={[5, 10, 14, 20, 50, 80, 100]}
           component="div"
           count={data.length}
           rowsPerPage={rowsPerPage}
